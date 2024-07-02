@@ -1,0 +1,36 @@
+name: Deploy PHP site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Or the branch you use for your main code
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.4  # You can specify the PHP version here
+
+    - name: Install dependencies
+      run: |
+        composer install
+        # Add other dependencies installation steps if needed
+
+    - name: Test PHP
+      run: php -v  # You can replace this with your test command
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./  # Directory to deploy (root directory in this case)
+        destination_dir: /var/www/html  # Target directory on your PHP server
+        # You might need to set up additional options to copy files to your server
+        
